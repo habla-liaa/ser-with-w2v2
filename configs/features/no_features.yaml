@@ -1,0 +1,5 @@
+(dataset)DummyFeature:
+    class: Identity
+    in: (in_task)->out
+    cache: False
+    in_memory: True

@@ -1,0 +1,15 @@
+defaults:
+  normalize: by_independent
+include:
+  switch: !var normalize
+  configs:
+  - name: by_independent
+    config: normalize_by.yaml
+    dataset: (dataset)
+    in_task: (in_task)
+    model_mods: (model_mods)
+  - name: global
+    config: normalize_global.yaml
+    dataset: (dataset)
+    in_task: (in_task)
+    model_mods: (model_mods)

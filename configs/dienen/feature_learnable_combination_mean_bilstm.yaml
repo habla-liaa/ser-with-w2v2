@@ -1,0 +1,68 @@
+defaults:
+  optimizer: Adam
+  lr: 1e-4
+  loss: categorical_crossentropy
+  n_epochs: 50
+  early_stopping_patience: 4 #If set to n_epochs it will deactivate early stopping ;)
+  metrics: categorical_accuracy
+  lstm_hidden_units: 128
+  lstm_hidden_activation: relu
+  lstm_batchnorm: True
+  lstm_bidirectional: False
+
+  batch_size: 64
+
+gpu_config:
+  device: !var gpu_id #Defaults to 0 (see models/dienen_classifier.yaml)
+  allow_growth: True
+Model:
+  name: feature_learnable_combination_masked_bilstm_pooling
+  Training:
+    n_epochs: !var n_epochs
+    workers: 1
+    loss: !var loss
+    optimizer:
+      type: !var optimizer
+      lr: !var lr
+      clipvalue: 1
+    schedule:
+      SaveCheckpoints:
+        monitor_metric: val_loss
+      EarlyStopping:
+        patience: !var early_stopping_patience
+      WANDBLogger:
+        loggers:
+          TrainMetrics:
+            freq: 10
+            unit: step
+    metrics: !var metrics
+  Architecture:
+  - Input:
+      name: input_signal
+      input: audios
+  - Input:
+      name: signal_mask
+      input: masks
+  - WeightedAverage:
+      name: activations_wa
+      axis: 2
+      input: input_signal
+  - Squeeze:
+      axis: -2
+  - LSTM:
+      units: !var lstm_hidden_units
+      activation: !var lstm_hidden_activation
+      batch_norm: !var lstm_batchnorm
+      name: hidden_layer
+      return_sequences: True
+      bidirectional: !var lstm_bidirectional
+      mask: signal_mask
+  - GlobalAveragePooling1D:
+      input: hidden_layer
+      mask: signal_mask
+  - Dense:
+      #units: 3 #This is replaced in downstream_mods.yaml by each dataset
+      activation: softmax
+      name: predictions
+  inputs: [input_signal, signal_mask]
+  outputs: [predictions]

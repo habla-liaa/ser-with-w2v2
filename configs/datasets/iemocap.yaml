@@ -1,0 +1,84 @@
+defaults:
+  IEMOCAP_partition: xval_predefined_folds_trainvaltest
+  IEMOCAP_relabel_excitement: happiness
+  IEMOCAP_emotions: [anger,happiness,sadness,neutral]
+  IEMOCAP_nemotions: 4
+  IEMOCAP_normalize_by: subject
+  IEMOCAP_leaveoneout_group: session
+
+  IEMOCAP_max_audio_size: 240000 #algunas corridas del exp1 no tienen esto, pero en el modelo large salta OEM sino
+
+  IEMOCAP_predefined_folds_train:
+  - ~/Datasets/IEMOCAP/partitions/train_logids_ses01_impro_script03.list
+  - ~/Datasets/IEMOCAP/partitions/train_logids_ses02_impro_script03.list
+  - ~/Datasets/IEMOCAP/partitions/train_logids_ses03_impro_script03.list
+  - ~/Datasets/IEMOCAP/partitions/train_logids_ses04_impro_script03.list
+  - ~/Datasets/IEMOCAP/partitions/train_logids_ses05_impro_script03.list
+  IEMOCAP_predefined_folds_val:
+  - ~/Datasets/IEMOCAP/partitions/validation_logids_ses01_impro_script03.list
+  - ~/Datasets/IEMOCAP/partitions/validation_logids_ses02_impro_script03.list
+  - ~/Datasets/IEMOCAP/partitions/validation_logids_ses03_impro_script03.list
+  - ~/Datasets/IEMOCAP/partitions/validation_logids_ses04_impro_script03.list
+  - ~/Datasets/IEMOCAP/partitions/validation_logids_ses05_impro_script03.list
+  IEMOCAP_predefined_folds_test:
+  - ~/Datasets/IEMOCAP/partitions/test_logids_ses01_impro_script03.list
+  - ~/Datasets/IEMOCAP/partitions/test_logids_ses02_impro_script03.list
+  - ~/Datasets/IEMOCAP/partitions/test_logids_ses03_impro_script03.list
+  - ~/Datasets/IEMOCAP/partitions/test_logids_ses04_impro_script03.list
+  - ~/Datasets/IEMOCAP/partitions/test_logids_ses05_impro_script03.list
+  IEMOCAP_predefined_folds_dev:
+  - ~/Datasets/IEMOCAP/partitions/trainval_logids_ses01_impro_script03.list
+  - ~/Datasets/IEMOCAP/partitions/trainval_logids_ses02_impro_script03.list
+  - ~/Datasets/IEMOCAP/partitions/trainval_logids_ses03_impro_script03.list
+  - ~/Datasets/IEMOCAP/partitions/trainval_logids_ses04_impro_script03.list
+  - ~/Datasets/IEMOCAP/partitions/trainval_logids_ses05_impro_script03.list 
+  IEMOCAP_partition_list_field: use_index
+  IEMOCAP_dienen_mod: dienen_config/Model/Training/schedule/WANDBLogger/loggers/TrainMetrics/prefix=IEMOCAP
+Tasks:
+  DownstreamIEMOCAP:
+    class: TaskGraph
+    cache: False
+    in:
+      wandb: !var wandb_run
+    Tasks:
+      IEMOCAPDownloader:
+        class: Downloader
+        in_memory: True
+        downloads:
+        - SourcePath: s3://lpepino-datasets2/datasets/iemocap-wav.zip
+          DestinationPath: ~/Datasets/iemocap-wav.zip
+          Extract: True
+        - SourcePath: s3://lpepino-datasets2/datasets/iemocap_partitions
+          DestinationPath: ~/Datasets/IEMOCAP/partitions
+      IEMOCAPReader:
+        class: IEMOCAPReader
+        run_after: IEMOCAPDownloader->out
+        dataset_path: ~/Datasets/IEMOCAP
+        in_memory: True
+      IEMOCAPRelabelExcitement:
+        class: Relabel
+        in: IEMOCAPReader->out
+        relabels:
+        - column: emotion
+          old_name: excited
+          new_name: !var IEMOCAP_relabel_excitement
+      IEMOCAPFilterEmotions:
+        class: Filter
+        in: IEMOCAPRelabelExcitement->out
+        column: emotion
+        include_values: !var IEMOCAP_emotions
+      IEMOCAPOneHot:
+        class: OneHotEncode
+        column: emotion
+        new_column: classID
+        in: IEMOCAPFilterEmotions->out
+        in_memory: True
+      include:
+      - config: ../features/features.yaml
+        dataset: IEMOCAP
+        in_task: IEMOCAPOneHot
+      - config: ../features/merge_features.yaml
+        dataset: IEMOCAP
+      - config: !var data_processing_config
+        dataset: IEMOCAP
+        n_classes: !var IEMOCAP_nemotions

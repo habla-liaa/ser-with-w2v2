@@ -1,0 +1,81 @@
+defaults:
+  opensmile_downsampling: 2
+
+(dataset)DataProcessor:
+  class: TaskGraph
+  logging: False
+  return_as_class: True
+  in_memory: True
+  cache: False
+  in:
+    batch_data: null
+  outputs: 
+    audio: MakeOSArray->out
+    mask: MakeMaskArray->out
+    targets: MakeTargetsArray->out
+  Tasks:
+    LoadDataframeOS:
+      class: LoadDataframeDP
+      in: self->batch_data
+      include_cols: !var opensmile_features
+      exclude_cols: !var opensmile_exclude_features
+      order_by: start
+      column_in: !var opensmile_column
+      column_out: !var opensmile_column
+      in_memory: True
+      cache: False
+    DownsampleOS:
+      class: DownsampleDP
+      in: LoadDataframeOS->out
+      column_in: !var opensmile_column
+      column_out: !var opensmile_column
+      in_memory: True
+      cache: False
+      axis: 0
+      factor: !var opensmile_downsampling
+    PadSequenceOS:
+      class: PadDP
+      in: DownsampleOS->out
+      column_in: !var opensmile_column
+      column_out: !var opensmile_column
+      max_length: !var (dataset)_model_max_seqlen
+      axis: 0
+      in_memory: True
+      cache: False
+    NormalizeSequenceOS:
+      class: NormalizeDP
+      in: PadSequenceOS->out
+      statistics: self->statistics
+      column_in: !var opensmile_column
+      column_out: !var opensmile_column
+      in_memory: True
+      columns: LoadDataframeOS->columns
+      cache: False
+    MakeOSArray:
+      class: ToNumpyDP
+      in: NormalizeSequenceOS->out
+      column_in: !var opensmile_column
+      in_memory: True
+      cache: False
+    MakeMaskArray:
+      class: ToNumpyDP
+      in: PadSequenceOS->out
+      column_in: mask
+      in_memory: True
+      cache: False
+    OneHotVector:
+      class: OneHotVectorDP
+      in: PadSequenceOS->out
+      n_classes: (n_classes)
+      column_in: classID
+      column_out: target
+      in_memory: True
+      cache: False
+    MakeTargetsArray:
+      class: ToNumpyDP
+      in: OneHotVector->out
+      column_in: target
+      in_memory: True
+      cache: False
+  
+

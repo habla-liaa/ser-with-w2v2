@@ -1,0 +1,65 @@
+(dataset)DataProcessor:
+  class: TaskGraph
+  logging: False
+  return_as_class: True
+  in_memory: True
+  cache: False
+  in:
+    batch_data: null
+  outputs: 
+    audio: MakeAudioArray->out
+    mask: MakeMaskArray->out
+    targets: MakeTargetsArray->out
+  Tasks:
+    PadSequence:
+      class: PadDP
+      in: self->batch_data
+      column_in: !var features
+      column_out: !var features
+      max_length: !var (dataset)_model_max_seqlen
+      axis: !var wav2vec2_padding_axis
+      in_memory: True
+      cache: False
+    SqueezeSequence:
+      class: SqueezeDP
+      in: PadSequence->out
+      column_in: !var features
+      column_out: !var features
+      in_memory: True
+      cache: False
+    NormalizeSequence:
+      class: NormalizeDP
+      in: SqueezeSequence->out
+      statistics: self->statistics
+      column_in: !var features
+      column_out: !var features
+      in_memory: True
+      cache: False
+    MakeAudioArray:
+      class: ToNumpyDP
+      in: NormalizeSequence->out
+      column_in: !var features
+      in_memory: True
+      cache: False
+    MakeMaskArray:
+      class: ToNumpyDP
+      in: SqueezeSequence->out
+      column_in: mask
+      in_memory: True
+      cache: False
+    OneHotVector:
+      class: OneHotVectorDP
+      in: SqueezeSequence->out
+      n_classes: (n_classes)
+      column_in: classID
+      column_out: target
+      in_memory: True
+      cache: False
+    MakeTargetsArray:
+      class: ToNumpyDP
+      in: OneHotVector->out
+      column_in: target
+      in_memory: True
+      cache: False
+  
+

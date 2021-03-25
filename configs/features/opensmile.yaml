@@ -1,0 +1,12 @@
+defaults:
+    opensmile_config: eGeMAPSv02
+    opensmile_feature_level: lld
+    save_opensmile_feature_files: True
+    opensmile_column: opensmile
+(dataset)OSFeature:
+    class: OpensmileExtractor
+    in: (in_task)->out
+    config: !var opensmile_config
+    feature_level: !var opensmile_feature_level
+    output_column: !var opensmile_column
+    save_feature_files: !var save_opensmile_feature_files

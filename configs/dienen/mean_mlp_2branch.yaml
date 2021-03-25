@@ -1,0 +1,83 @@
+defaults:
+  optimizer: Adam
+  lr: 1e-4
+  loss: categorical_crossentropy
+  n_epochs: 50
+  early_stopping_patience: 4 #If set to n_epochs it will deactivate early stopping ;)
+  metrics: categorical_accuracy
+  mlp_hidden_units: 128
+  mlp_hidden_activation: relu
+  mlp_batchnorm: True
+  batch_size: 64
+
+gpu_config:
+  device: !var gpu_id #Defaults to 0 (see models/dienen_classifier.yaml)
+  allow_growth: True
+Model:
+  name: 2branch_masked_mlp_pooling
+  Training:
+    n_epochs: !var n_epochs
+    workers: 1
+    loss: !var loss
+    optimizer:
+      type: !var optimizer
+      lr: !var lr
+      clipvalue: 1
+    schedule:
+      SaveCheckpoints:
+        monitor_metric: val_loss
+      EarlyStopping:
+        patience: !var early_stopping_patience
+      WANDBLogger:
+        loggers:
+          TrainMetrics:
+            freq: 10
+            unit: step
+    metrics: !var metrics
+  Architecture:
+  - Input:
+      name: w2v_input
+      input: w2v
+  - Input:
+      name: signal_mask
+      input: masks
+  - WeightedAverage:
+      name: activations_wa
+      axis: 2
+      input: w2v_input
+  - Squeeze:
+      axis: -2
+  - Conv1D:
+      filters: !var mlp_hidden_units
+      kernel_size: 1
+      activation: !var mlp_hidden_activation
+      batch_norm: !var mlp_batchnorm
+      name: hidden_layer_w2v
+  - Input:
+      name: os_input
+      input: os
+  - Conv1D:
+      filters: !var mlp_hidden_units
+      kernel_size: 1
+      activation: !var mlp_hidden_activation
+      batch_norm: !var mlp_batchnorm
+      name: hidden_layer_os
+  - Concatenate:
+      name: merge_features
+      input: [hidden_layer_w2v,hidden_layer_os]
+      axis: -1
+  - Conv1D:
+      filters: !var mlp_hidden_units
+      kernel_size: 1
+      activation: !var mlp_hidden_activation
+      batch_norm: !var mlp_batchnorm
+      name: hidden_layer_merged
+  - GlobalAveragePooling1D:
+      input: hidden_layer_merged
+      mask: signal_mask
+  - Dense:
+      #units: 3 #This is replaced in downstream_mods.yaml by each dataset
+      activation: softmax
+      name: predictions
+  inputs: [w2v_input, os_input, signal_mask]
+  outputs: [predictions]

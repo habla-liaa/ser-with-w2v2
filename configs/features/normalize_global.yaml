@@ -1,0 +1,20 @@
+(dataset)StatisticsTrain:
+  class: NormalizationStatistics
+  in: (in_task)->train
+  by: global
+  in_memory: !nocache True
+  column: !var features
+  axis: !var normalization_axis
+(dataset)StatisticsValidation:
+  class: Identity
+  in: (dataset)StatisticsTrain->out
+  in_memory: True
+(dataset)StatisticsTest:
+  class: Identity
+  in: (dataset)StatisticsTrain->out
+  in_memory: True
+include:
+- config: ../models/models.yaml
+  dataset: (dataset)
+  in_task: (dataset)Statistics
+  model_mods: (model_mods)

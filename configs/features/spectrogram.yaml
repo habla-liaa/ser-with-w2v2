@@ -1,0 +1,20 @@
+defaults:
+  spectrogram_type: magnitude
+  spectrogram_frame_size: 512
+  spectrogram_hop_size: 128
+  spectrogram_window: hann
+  spectrogram_nfft: 512
+  save_spectrogram_feature_files: True
+  spectrogram_column: spectrogram
+  
+(dataset)SpectrogramFeature:
+    class: Spectrogram
+    in: (in_task)->out
+    output_column: !var spectrogram_column
+    save_feature_files: !var save_spectrogram_feature_files
+    type: !var spectrogram_type
+    frame_size: !var spectrogram_frame_size
+    hop_size: !var spectrogram_hop_size
+    window: !var spectrogram_window
+    nfft: !var spectrogram_nfft
+    cache: False

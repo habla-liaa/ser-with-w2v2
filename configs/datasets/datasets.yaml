@@ -1,0 +1,7 @@
+include:
+  switch: !var dataset
+  configs:
+  - name: ravdess
+    config: ravdess.yaml
+  - name: iemocap
+    config: iemocap.yaml

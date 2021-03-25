@@ -1,0 +1,19 @@
+include:
+  switch: !var features
+  configs:
+  - name: wav2vec2
+    config: wav2vec2.yaml
+    dataset: (dataset)
+    in_task: (in_task)
+  - name: opensmile
+    config: opensmile.yaml
+    dataset: (dataset)
+    in_task: (in_task)
+  - name: none
+    config: no_features.yaml
+    dataset: (dataset)
+    in_task: (in_task)
+  - name: spectrogram
+    config: spectrogram.yaml
+    dataset: (dataset)
+    in_task: (in_task)

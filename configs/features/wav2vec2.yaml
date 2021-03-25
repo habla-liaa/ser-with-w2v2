@@ -1,0 +1,22 @@
+defaults:
+    wav2vec2_model_path: ~/Models/wav2vec2/wav2vec_small.pt
+    wav2vec2_dict_path: null
+    wav2vec2_embedding_layer: output
+    wav2vec2_column: wav2vec2
+    normalization_axis: 1
+    wav2vec2_padding_axis: 1
+    save_wav2vec2_feature_files: True
+(dataset)Wav2Vec2Feature:
+    class: Wav2Vec2Embeddings
+    in: (in_task)->out
+    model_path: !var wav2vec2_model_path
+    dict_path: !var wav2vec2_dict_path
+    mode: !var wav2vec2_summarization
+    max_size: !var (dataset)_max_audio_size
+    layer: !var wav2vec2_embedding_layer
+    output_column: !var wav2vec2_column
+    save_feature_files: !var save_wav2vec2_feature_files
+#include:
+#  - config: ../partitions/partitions.yaml
+#    dataset: (dataset)
+#    in_task: Wav2Vec2Embeddings
