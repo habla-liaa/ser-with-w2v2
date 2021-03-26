@@ -1,5 +1,6 @@
 defaults:
     gpu_id: 0
+    seed: 1234
 (dataset)TrainGenerator:
     class: BatchGenerator
     in: (dataset)Partition->train
@@ -11,6 +12,7 @@ defaults:
       statistics: (dataset)StatisticsTrain->out
     cache: False
     in_memory: !nocache True
+    seed: !var seed
 (dataset)ValidationGenerator:
     class: BatchGenerator
     in: (dataset)Partition->validation
@@ -23,6 +25,7 @@ defaults:
     cache: False
     in_memory: !nocache True
     shuffle: False
+    seed: !var seed
 (dataset)TestGenerator:
     class: BatchGenerator
     in: (dataset)Partition->test
@@ -35,6 +38,7 @@ defaults:
     cache: False
     in_memory: !nocache True
     shuffle: False
+    seed: !var seed
 (dataset)Model:
     class: DienenModel
     train_data: (dataset)TrainGenerator->out
@@ -43,6 +47,7 @@ defaults:
     export: True
     mods: !var (dataset)_dienen_mod
     wandb_run: self->wandb
+    seed: !var seed
 (dataset)Predict:
     class: DienenPredict
     data: (dataset)TestGenerator->out
