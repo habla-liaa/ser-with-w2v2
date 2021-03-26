@@ -13,7 +13,7 @@ defaults:
   Ravdess_relabel_calm: '01' #(neutral)
   Ravdess_emotions: null
   Ravdess_dienen_mod: dienen_config/Model/Training/schedule/WANDBLogger/loggers/TrainMetrics/prefix=Ravdess
-
+  Ravdess_nemotions: 7
 Tasks:
   DownstreamRavdess:
     class: TaskGraph
@@ -61,4 +61,4 @@ Tasks:
         dataset: Ravdess
       - config: !var data_processing_config
         dataset: Ravdess
-        n_classes: 7
+        n_classes: !var Ravdess_nemotions
