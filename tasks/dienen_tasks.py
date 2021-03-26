@@ -43,6 +43,9 @@ class DienenModel(Task):
 
         dienen_model = Model(self.parameters['dienen_config'])
 
+        seed = self.parameters.get('seed',1234)
+        dienen_model.set_seed(seed)
+
         dienen_model.set_model_path(self.cache_dir)
 
         cache_dir = GenericFile(self.cache_dir,'checkpoints')
@@ -108,6 +111,7 @@ class DienenModel(Task):
             dienen_model.fit(train_data, validation_data = validation_data, from_epoch=last_epoch+1)
 
         dienen_model.load_weights(strategy='min')
+        dienen_model.clear_session()
 
         return dienen_model
 
