@@ -4,7 +4,8 @@ from tensorflow.keras.utils import Sequence
 import copy
 
 class BatchGenerator_(Sequence):
-    def __init__(self, data, shuffle=True, batch_task = None, batch_size=16, extra_data=None, batch_x=None, batch_y=None):
+    def __init__(self, data, shuffle=True, batch_task = None, batch_size=16, extra_data=None, batch_x=None, batch_y=None, seed=1234):
+        np.random.seed(seed)
         self.data = data
         self.index = np.array(data.index)
         self.shuffle = shuffle
@@ -55,5 +56,6 @@ class BatchGenerator(Task):
         extra_data = self.parameters.get('extra_data',None)
         shuffle = self.parameters.get('shuffle',True)
         batch_size = self.parameters.get('batch_size',16)
+        seed = self.parameters.get('seed',1234)
 
-        return BatchGenerator_(data, shuffle, batch_task, batch_size, extra_data, batch_x, batch_y)
+        return BatchGenerator_(data, shuffle, batch_task, batch_size, extra_data, batch_x, batch_y, seed)
