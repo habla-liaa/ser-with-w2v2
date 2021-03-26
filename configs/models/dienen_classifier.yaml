@@ -1,0 +1,70 @@
+defaults:
+    gpu_id: 0
+(dataset)TrainGenerator:
+    class: BatchGenerator
+    in: (dataset)Partition->train
+    batch_task: (dataset)DataProcessor->out
+    x: !var batch_x
+    y: !var batch_y
+    batch_size: !var batch_size
+    extra_data: 
+      statistics: (dataset)StatisticsTrain->out
+    cache: False
+    in_memory: !nocache True
+(dataset)ValidationGenerator:
+    class: BatchGenerator
+    in: (dataset)Partition->validation
+    batch_task: (dataset)DataProcessor->out
+    x: !var batch_x
+    y: !var batch_y
+    batch_size: !var batch_size
+    extra_data: 
+      statistics: (dataset)StatisticsValidation->out
+    cache: False
+    in_memory: !nocache True
+    shuffle: False
+(dataset)TestGenerator:
+    class: BatchGenerator
+    in: (dataset)Partition->test
+    batch_task: (dataset)DataProcessor->out
+    x: !var batch_x
+    y: !var batch_y
+    batch_size: !var batch_size
+    extra_data: 
+      statistics: (dataset)StatisticsTest->out
+    cache: False
+    in_memory: !nocache True
+    shuffle: False
+(dataset)Model:
+    class: DienenModel
+    train_data: (dataset)TrainGenerator->out
+    validation_data: (dataset)ValidationGenerator->out
+    dienen_config: !var dienen_config
+    export: True
+    mods: !var (dataset)_dienen_mod
+    wandb_run: self->wandb
+(dataset)Predict:
+    class: DienenPredict
+    data: (dataset)TestGenerator->out
+    model: (dataset)Model->out
+    export: True
+    return_column: filename
+    cache: False
+(dataset)PredictionIndex:
+    class: Pool
+    in: (dataset)Predict->predictions
+    type: argmax
+    axis: -1
+    in_memory: True
+(dataset)TargetIndex:
+    class: Pool
+    in: (dataset)Predict->targets
+    type: argmax
+    axis: -1
+    in_memory: True
+(dataset)Metrics:
+    class: ClassificationMetrics
+    predictions: (dataset)PredictionIndex->out
+    targets: (dataset)TargetIndex->out
+    export: True
+    labels: (dataset)OneHot->labels

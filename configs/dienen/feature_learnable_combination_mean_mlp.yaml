@@ -7,7 +7,7 @@ defaults:
   metrics: categorical_accuracy
   mlp_hidden_units: 128
   mlp_hidden_activation: relu
-  mlp_batchnorm: True
+  mlp_batchnorm: False
   batch_size: 64
 
 gpu_config:
@@ -37,11 +37,9 @@ Model:
   Architecture:
   - Input:
       name: input_signal
-      #shape: !var dienen_input_shape
       input: audios
   - Input:
       name: signal_mask
-      #shape: !var dienen_mask_shape
       input: masks
   - WeightedAverage:
       name: activations_wa
@@ -54,12 +52,17 @@ Model:
       kernel_size: 1
       activation: !var mlp_hidden_activation
       batch_norm: !var mlp_batchnorm
-      name: hidden_layer
+      name: hidden_layer_1
+  - Conv1D:
+      filters: !var mlp_hidden_units
+      kernel_size: 1
+      activation: !var mlp_hidden_activation
+      batch_norm: !var mlp_batchnorm
+      name: hidden_layer_2
   - GlobalAveragePooling1D:
-      input: hidden_layer
+      input: hidden_layer_2
       mask: signal_mask
   - Dense:
-      #units: 3 #This is replaced in downstream_mods.yaml by each dataset
       activation: softmax
       name: predictions
   inputs: [input_signal, signal_mask]

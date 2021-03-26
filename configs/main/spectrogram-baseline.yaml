@@ -3,11 +3,11 @@ modules:
 global:
   cache_path: s3://lpepino-datasets2/is2021_experiments/cache
   dataset: [ravdess, iemocap]
-  features: opensmile
+  features: spectrogram
   model: dienen_classifier
-  
-  Ravdess_model_max_seqlen: 250 #5 s
-  IEMOCAP_model_max_seqlen: 750 #15 s
+
+  Ravdess_model_max_seqlen: 250
+  IEMOCAP_model_max_seqlen: 750
   IEMOCAP_partition: leave_one_out
 
   dienen_config: !yaml experiments/configs/dienen/mean_mlp.yaml
@@ -16,7 +16,13 @@ global:
   batch_size: 32
   n_epochs: 100
 
-  data_processing_config: ../batch/os_sequence_embedding.yaml
+  spectrogram_frame_size: 400
+  spectrogram_nfft: 512
+  spectrogram_hop_size: 320
+
+  data_processing_config: ../batch/sequence_embedding.yaml
+  sequence_padding_axis: 0
+
   wandb_run: WANDBExperiment->out
 
 include:

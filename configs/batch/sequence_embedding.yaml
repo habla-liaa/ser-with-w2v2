@@ -17,7 +17,7 @@
       column_in: !var features
       column_out: !var features
       max_length: !var (dataset)_model_max_seqlen
-      axis: !var wav2vec2_padding_axis
+      axis: !var sequence_padding_axis
       in_memory: True
       cache: False
     SqueezeSequence:

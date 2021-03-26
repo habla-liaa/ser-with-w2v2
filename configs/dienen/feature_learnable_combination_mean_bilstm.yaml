@@ -6,8 +6,10 @@ defaults:
   early_stopping_patience: 4 #If set to n_epochs it will deactivate early stopping ;)
   metrics: categorical_accuracy
   lstm_hidden_units: 128
+  mlp_hidden_units: 128
+  dropout: 0.2
   lstm_hidden_activation: relu
-  lstm_batchnorm: True
+  lstm_batchnorm: False
   lstm_bidirectional: False
 
   batch_size: 64
@@ -49,11 +51,16 @@ Model:
       input: input_signal
   - Squeeze:
       axis: -2
+  - Conv1D:
+      filters: !var mlp_hidden_units
+      kernel_size: 1
+      activation: relu
+      name: hidden_layer
   - LSTM:
       units: !var lstm_hidden_units
       activation: !var lstm_hidden_activation
       batch_norm: !var lstm_batchnorm
-      name: hidden_layer
+      name: lstm_layer
       return_sequences: True
       bidirectional: !var lstm_bidirectional
       mask: signal_mask

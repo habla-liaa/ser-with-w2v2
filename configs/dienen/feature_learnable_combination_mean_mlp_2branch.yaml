@@ -7,7 +7,7 @@ defaults:
   metrics: categorical_accuracy
   mlp_hidden_units: 128
   mlp_hidden_activation: relu
-  mlp_batchnorm: True
+  mlp_batchnorm: False
   batch_size: 64
 
 gpu_config:
@@ -76,7 +76,6 @@ Model:
       input: hidden_layer_merged
       mask: signal_mask
   - Dense:
-      #units: 3 #This is replaced in downstream_mods.yaml by each dataset
       activation: softmax
       name: predictions
   inputs: [w2v_input, os_input, signal_mask]

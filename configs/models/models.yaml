@@ -1,0 +1,8 @@
+include:
+  switch: !var model
+  configs:
+  - name: dienen_classifier
+    config: dienen_classifier.yaml
+    dataset: (dataset)
+    in_task: (in_task)
+    mods: (model_mods)

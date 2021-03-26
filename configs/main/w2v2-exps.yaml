@@ -1,0 +1,52 @@
+modules:
+- tasks
+global:
+  cache_path: s3://lpepino-datasets2/is2021_experiments/cache
+  dataset: [ravdess, iemocap]
+  features: wav2vec2
+  model: dienen_classifier
+
+  Ravdess_model_max_seqlen: 250
+  IEMOCAP_model_max_seqlen: 750
+  IEMOCAP_partition: leave_one_out
+
+  dienen_config: !yaml experiments/configs/dienen/feature_learnable_combination_mean_mlp.yaml
+  batch_x: [audio,mask]
+  batch_y: targets
+  batch_size: 32
+  n_epochs: 100
+  
+  wav2vec2_summarization: sequence
+  wav2vec2_embedding_layer: {} #This dict could have from and to keys. As default is 0 and len(activations), this will use all activations
+  wav2vec2_padding_axis: 0
+  normalization_axis: 0
+
+  data_processing_config: ../batch/sequence_embedding.yaml
+  wandb_run: WANDBExperiment->out
+
+include:
+- config: ../datasets/datasets.yaml
+
+Tasks:
+  WANDBExperiment:
+    class: WANDBExperiment
+    project_name: w2v_ser
+    experiment_name: ravdess_test
+    description: Testing system in RAVDESS
+    run_first: !nocache True
+    cache: False
+  Wav2VecModelDownloader:
+    class: Downloader
+    run_after: WANDBExperiment->out
+    in_memory: True
+    downloads:
+    - SourcePath: https://dl.fbaipublicfiles.com/fairseq/wav2vec/wav2vec_small.pt #Wav2Vec 2.0 Base
+      DestinationPath: ~/Models/wav2vec2/wav2vec_small.pt
+    - SourcePath: https://dl.fbaipublicfiles.com/fairseq/wav2vec/wav2vec_small_960h.pt #Wav2Vec 2.0 Base Finetuned on 960h Librispeech
+      DestinationPath: ~/Models/wav2vec2/wav2vec_small_960h.pt
+    - SourcePath: https://dl.fbaipublicfiles.com/fairseq/wav2vec/wav2vec_vox_new.pt #Wav2Vec 2.0 Large (LV-60)
+      DestinationPath: ~/Models/wav2vec2/wav2vec_vox_new.pt.pt
+    - SourcePath: https://dl.fbaipublicfiles.com/fairseq/wav2vec/wav2vec_vox_960h_pl.pt #Wav2Vec 2.0 Large (LV-60) Finetuned on 960h Librispeech with self training
+      DestinationPath: ~/Models/wav2vec2/wav2vec_vox_960h_pl.pt
+    - SourcePath: https://dl.fbaipublicfiles.com/fairseq/wav2vec/dict.ltr.txt
+      DestinationPath: ~/Models/wav2vec2/dict.ltr.txt

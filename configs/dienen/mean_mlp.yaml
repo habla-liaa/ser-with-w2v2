@@ -3,7 +3,7 @@ defaults:
   lr: 1e-4
   loss: categorical_crossentropy
   n_epochs: 50
-  early_stopping_patience: 2 #If set to n_epochs it will deactivate early stopping ;)
+  early_stopping_patience: 4 #If set to n_epochs it will deactivate early stopping ;)
   metrics: categorical_accuracy
   mlp_hidden_units: 128
   mlp_hidden_activation: relu

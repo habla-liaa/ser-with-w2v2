@@ -1,0 +1,52 @@
+modules:
+- tasks
+global:
+  cache_path: s3://lpepino-datasets2/is2021_experiments/cache
+  dataset: [ravdess, iemocap]
+  features: [opensmile,wav2vec2]
+  model: dienen_classifier
+
+  Ravdess_model_max_seqlen: 250
+  IEMOCAP_model_max_seqlen: 750
+  IEMOCAP_partition: leave_one_out
+
+  dienen_config: !yaml experiments/configs/dienen/feature_learnable_combination_mean_mlp_2branch.yaml
+  batch_x: [w2v,opensmile,mask]
+  batch_y: targets
+  batch_size: 32
+  n_epochs: 100
+  
+  mlp_batchnorm: False
+  wav2vec2_embedding_layer: enc_and_transformer
+
+  data_processing_config: ../batch/os_and_w2v_sequence_embedding.yaml
+  normalization_axis: 0
+  wandb_run: WANDBExperiment->out
+
+include:
+- config: ../datasets/datasets.yaml
+
+Tasks:
+  WANDBExperiment:
+    class: WANDBExperiment
+    project_name: w2v_ser
+    experiment_name: ravdess_test
+    description: Testing system in RAVDESS
+    run_first: !nocache True
+    cache: False
+  Wav2VecModelDownloader:
+    class: Downloader
+    run_after: WANDBExperiment->out
+    in_memory: True
+    downloads:
+    - #SourcePath: https://dl.fbaipublicfiles.com/fairseq/wav2vec/wav2vec_small.pt #Wav2Vec 2.0 Base
+      SourcePath: s3://lpepino-datasets2/pretrained_models/wav2vec2/wav2vec_small.pt
+      DestinationPath: ~/Models/wav2vec2/wav2vec_small.pt
+    - SourcePath: s3://lpepino-datasets2/pretrained_models/wav2vec/wav2vec_small_960h.pt #Wav2Vec 2.0 Base Finetuned on 960h Librispeech
+      DestinationPath: ~/Models/wav2vec2/wav2vec_small_960h.pt
+    - SourcePath: s3://lpepino-datasets2/pretrained_models/wav2vec/wav2vec_vox_new.pt.pt #Wav2Vec 2.0 Large (LV-60)
+      DestinationPath: ~/Models/wav2vec2/wav2vec_vox_new.pt.pt
+    - SourcePath: s3://lpepino-datasets2/pretrained_models/wav2vec/wav2vec_vox_960h_pl.pt #Wav2Vec 2.0 Large (LV-60) Finetuned on 960h Librispeech with self training
+      DestinationPath: ~/Models/wav2vec2/wav2vec_vox_960h_pl.pt
+    - SourcePath: s3://lpepino-datasets2/pretrained_models/wav2vec/dict.ltr.txt
+      DestinationPath: ~/Models/wav2vec2/dict.ltr.txt
