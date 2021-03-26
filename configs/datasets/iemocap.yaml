@@ -67,7 +67,7 @@ Tasks:
         in: IEMOCAPRelabelExcitement->out
         column: emotion
         include_values: !var IEMOCAP_emotions
-      IEMOCAPOneHot:
+      IEMOCAPLabelEncode:
         class: LabelEncoder
         column: emotion
         new_column: classID
@@ -76,7 +76,7 @@ Tasks:
       include:
       - config: ../features/features.yaml
         dataset: IEMOCAP
-        in_task: IEMOCAPOneHot
+        in_task: IEMOCAPLabelEncode
       - config: ../features/merge_features.yaml
         dataset: IEMOCAP
       - config: !var data_processing_config

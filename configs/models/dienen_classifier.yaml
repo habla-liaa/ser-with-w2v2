@@ -67,4 +67,4 @@ defaults:
     predictions: (dataset)PredictionIndex->out
     targets: (dataset)TargetIndex->out
     export: True
-    labels: (dataset)OneHot->labels
+    labels: (dataset)LabelEncode->labels

@@ -5,11 +5,12 @@ from pymediainfo import MediaInfo
 import tqdm
 import pandas as pd
 import copy
+import numpy as np
 
 class Concatenate(Task):
 	def process(self):
 		return np.concatenate(self.parameters['in'],axis=self.parameters['axis'])
-        
+
 class Filter(Task):
     def process(self):
         exclude_values = self.parameters.get('exclude_values',None)
@@ -76,6 +77,22 @@ class OutputMerger(Task):
         
         self.output_names = outputs_names
         return tuple(outputs)
+
+class Pool(Task):
+    def process(self):
+        pool_type = self.parameters.get('type','mean')
+        axis = self.parameters.get('axis',-1)
+        data = self.parameters.get('in',None)
+
+        print('Input data shape: {}'.format(data.shape))
+        if pool_type == 'mean':
+            return np.mean(data,axis=axis)
+        elif pool_type == 'sum':
+            return np.sum(data,axis=axis)
+        elif pool_type == 'argmax':
+            return np.argmax(data,axis=axis)
+        elif pool_type == 'max':
+            return np.max(data,axis=axis)
 
 class Relabel(Task):
     def process(self):

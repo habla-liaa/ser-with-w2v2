@@ -48,7 +48,7 @@ Tasks:
         column: emotion
         include_values: !var Ravdess_emotions
         cache: False
-      RavdessOneHot:
+      RavdessLabelEncode:
         class: LabelEncoder
         column: emotion
         new_column: classID
@@ -57,7 +57,7 @@ Tasks:
       include:
       - config: ../features/features.yaml
         dataset: Ravdess
-        in_task: RavdessOneHot
+        in_task: RavdessLabelEncode
       - config: ../features/merge_features.yaml
         dataset: Ravdess
       - config: !var data_processing_config
