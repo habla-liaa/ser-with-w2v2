@@ -33,7 +33,6 @@ Tasks:
         run_after: RavdessDownloader->out
         dataset_path: ~/Datasets/RAVDESS
         filename_re: (?P<modality>\d*)-(?P<vocal_channel>\d*)-(?P<emotion>\d*)-(?P<emotional_intensity>\d*)-(?P<statement>\d*)-(?P<repetition>\d*)-(?P<actor>\d*).wav
-        in_memory: True
       RavdessRelabelCalm:
         class: Relabel
         in: RavdessReader->out
@@ -41,13 +40,13 @@ Tasks:
         - column: emotion
           old_name: '02'
           new_name: !var Ravdess_relabel_calm
-        cache: False
+        in_memory: True
       RavdessFilterEmotions:
         class: Filter
         in: RavdessRelabelCalm->out
         column: emotion
         include_values: !var Ravdess_emotions
-        cache: False
+        in_memory: True
       RavdessLabelEncode:
         class: LabelEncoder
         column: emotion

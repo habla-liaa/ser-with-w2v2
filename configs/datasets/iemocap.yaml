@@ -54,7 +54,6 @@ Tasks:
         class: IEMOCAPReader
         run_after: IEMOCAPDownloader->out
         dataset_path: ~/Datasets/IEMOCAP
-        in_memory: True
       IEMOCAPRelabelExcitement:
         class: Relabel
         in: IEMOCAPReader->out
@@ -62,11 +61,13 @@ Tasks:
         - column: emotion
           old_name: excited
           new_name: !var IEMOCAP_relabel_excitement
+        in_memory: True
       IEMOCAPFilterEmotions:
         class: Filter
         in: IEMOCAPRelabelExcitement->out
         column: emotion
         include_values: !var IEMOCAP_emotions
+        in_memory: True
       IEMOCAPLabelEncode:
         class: LabelEncoder
         column: emotion

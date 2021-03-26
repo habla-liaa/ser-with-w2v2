@@ -2,21 +2,18 @@
   class: NormalizationStatistics
   in: (in_task)->train
   by: !var (dataset)_normalize_by
-  in_memory: !nocache True
   column: !var features
   axis: !var normalization_axis
 (dataset)StatisticsValidation:
   class: NormalizationStatistics
   in: (in_task)->validation
   by: !var (dataset)_normalize_by
-  in_memory: !nocache True
   column: !var features
   axis: !var normalization_axis
 (dataset)StatisticsTest:
   class: NormalizationStatistics
   in: (in_task)->test
   by: !var (dataset)_normalize_by
-  in_memory: !nocache True
   column: !var features
   axis: !var normalization_axis
 include:

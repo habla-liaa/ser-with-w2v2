@@ -2,7 +2,6 @@
     class: Merge
     in: (dataset)*Feature->out
     in_memory: !nocache True
-    cache: False
 include:
 - config: ../partitions/partitions.yaml
   dataset: (dataset)

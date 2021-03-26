@@ -8,7 +8,7 @@
   cache: False
   in:
     data: (in_task)->out
-    labels: (dataset)OneHot->labels
+    labels: (dataset)LabelEncode->labels
     dev_partitions: !map (dataset)LeaveOneOut->train
     test_partitions: !map (dataset)LeaveOneOut->test
     data_processor: (dataset)DataProcessor->out

@@ -5,8 +5,6 @@
   group_column: !var (dataset)_group_column
   splits: !var (dataset)_group_splits
   export: True
-  in_memory: !nocache True
-  cache: False
 (dataset)Partition:
   class: Split
   in: (dataset)Split->out
@@ -16,4 +14,4 @@ include:
 - config: ../features/normalize.yaml
   dataset: (dataset)
   in_task: (dataset)Partition
-  model_mods: (dataset)Metrics/labels=(dataset)OneHot->labels&(dataset)TrainGenerator/batch_task=(dataset)DataProcessor->out&(dataset)ValidationGenerator/batch_task=(dataset)DataProcessor->out&(dataset)TestGenerator/batch_task=(dataset)DataProcessor->out
+  model_mods: (dataset)Metrics/labels=(dataset)LabelEncode->labels&(dataset)TrainGenerator/batch_task=(dataset)DataProcessor->out&(dataset)ValidationGenerator/batch_task=(dataset)DataProcessor->out&(dataset)TestGenerator/batch_task=(dataset)DataProcessor->out

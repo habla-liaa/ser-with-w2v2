@@ -7,7 +7,7 @@ global:
   model: dienen_classifier
 
   Ravdess_model_max_seqlen: 250
-  IEMOCAP_model_max_seqlen: 750
+  IEMOCAP_model_max_seqlen: 400
   IEMOCAP_partition: leave_one_out
 
   dienen_config: !yaml experiments/configs/dienen/feature_learnable_combination_mean_mlp.yaml

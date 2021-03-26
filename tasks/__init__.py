@@ -9,3 +9,4 @@ from .dienen_tasks import *
 from .splits import *
 from .metrics import *
 from .generators import *
+from .wandb import *

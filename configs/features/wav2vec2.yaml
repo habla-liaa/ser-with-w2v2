@@ -16,7 +16,3 @@ defaults:
     layer: !var wav2vec2_embedding_layer
     output_column: !var wav2vec2_column
     save_feature_files: !var save_wav2vec2_feature_files
-#include:
-#  - config: ../partitions/partitions.yaml
-#    dataset: (dataset)
-#    in_task: Wav2Vec2Embeddings
