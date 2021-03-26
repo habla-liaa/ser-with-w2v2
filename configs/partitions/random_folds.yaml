@@ -1,0 +1,76 @@
+(dataset)Split:
+  class: RandomSplit
+  in: (in_task)->out
+  column: fold
+  splits: !var n_folds
+  export: True
+(dataset)LeaveOneOut:
+  class: LeaveOneOut
+  in: (dataset)Split->out
+  group_col: fold
+  cache: False
+(dataset)KFold:
+  class: TaskGraph
+  cache: False
+  in:
+    data: (dataset)Split->out
+    labels: (dataset)OneHot->labels
+    dev_partitions: !map (dataset)LeaveOneOut->train
+    test_partitions: !map (dataset)LeaveOneOut->test
+    data_processor: (dataset)DataProcessor->out
+  outputs:
+    predictions: (dataset)PredictionIndex->out
+    targets: (dataset)TargetIndex->out
+    metrics: (dataset)Metrics->out
+  Tasks:
+    (dataset)PartitionDevTest:
+      class: Split
+      in: self->data
+      split_col: fold
+      group_outputs:
+        dev: self->dev_partitions
+        test: self->test_partitions
+      in_memory: !nocache True
+      cache: False
+    (dataset)PartitionTrainValColumn:
+      class: GroupSplit
+      in: (dataset)PartitionDevTest->dev
+      column: partition
+      group_column: fold
+      in_memory: !nocache True
+      splits:
+        train: 0.9
+        validation: 0.1
+    (dataset)PartitionTrainVal:
+      class: Split
+      in: (dataset)PartitionTrainValColumn->out
+      split_col: partition
+      in_memory: !nocache True
+      cache: False
+    (dataset)Partition:
+      class: OutputMerger
+      cache: False
+      in_memory: True
+      outputs:
+        train: (dataset)PartitionTrainVal->train
+        validation: (dataset)PartitionTrainVal->validation
+        test: (dataset)PartitionDevTest->test
+    include:
+    - config: ../features/normalize.yaml
+      dataset: (dataset)
+      in_task: (dataset)Partition
+      model_mods: (dataset)Metrics/labels=self->labels&(dataset)TrainGenerator/batch_task=self->data_processor&(dataset)ValidationGenerator/batch_task=self->data_processor&(dataset)TestGenerator/batch_task=self->data_processor
+(dataset)MergePredictions:
+  class: Concatenate
+  in: (dataset)KFold->predictions
+  axis: 0
+(dataset)MergeTargets:
+  class: Concatenate
+  in: (dataset)KFold->targets
+  axis: 0
+(dataset)MergedMetrics:
+  class: ClassificationMetrics
+  predictions: (dataset)MergePredictions->out
+  targets: (dataset)MergeTargets->out
+  export: True
+    

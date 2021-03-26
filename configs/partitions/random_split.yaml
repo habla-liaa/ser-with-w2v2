@@ -1,0 +1,18 @@
+(dataset)Split:
+  class: RandomSplit
+  in: (in_task)->out
+  column: partition
+  splits:
+    train: !var (dataset)_split_proportion_train
+    validation: !var (dataset)_split_proportion_validation
+    test: !var (dataset)_split_proportion_test
+  export: True
+(dataset)Partition:
+  class: Split
+  in: (dataset)Split->out
+  split_col: partition
+  in_memory: !nocache True
+include:
+- config: ../features/features.yaml
+  dataset: (dataset)
+  in_task: (dataset)Partition

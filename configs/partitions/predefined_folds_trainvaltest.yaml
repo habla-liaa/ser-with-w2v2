@@ -1,0 +1,52 @@
+(dataset)ParametersAsOutput: #Idealmente deberia poder combinar tags al estilo !map !var ..., por ahora uso este workaround
+  class: OutputMerger
+  cache: False
+  in_memory: True
+  outputs:
+    train: !var (dataset)_predefined_folds_train
+    validation: !var (dataset)_predefined_folds_val
+    test: !var (dataset)_predefined_folds_test
+(dataset)KFold:
+  class: TaskGraph
+  cache: False
+  in:
+    data: (in_task)->out
+    labels: (dataset)OneHot->labels
+    train_partitions: !map (dataset)ParametersAsOutput->train
+    val_partitions: !map (dataset)ParametersAsOutput->validation
+    test_partitions: !map (dataset)ParametersAsOutput->test
+    data_processor: (dataset)DataProcessor->out
+  outputs:
+    predictions: (dataset)PredictionIndex->out
+    targets: (dataset)TargetIndex->out
+    metrics: (dataset)Metrics->out
+  Tasks:
+    (dataset)Partition:
+      class: Split
+      in: self->data
+      split_col: !var (dataset)_leaveoneout_group
+      lists:
+        train: self->train_partitions
+        validation: self->val_partitions
+        test: self->test_partitions
+      list_item_column: !var (dataset)_partition_list_field
+      in_memory: !nocache True
+      cache: False
+    include:
+    - config: ../features/normalize.yaml
+      dataset: (dataset)
+      in_task: (dataset)Partition
+      model_mods: (dataset)Metrics/labels=self->labels&(dataset)TrainGenerator/batch_task=self->data_processor&(dataset)ValidationGenerator/batch_task=self->data_processor&(dataset)TestGenerator/batch_task=self->data_processor
+(dataset)MergePredictions:
+  class: Concatenate
+  in: (dataset)KFold->predictions
+  axis: 0
+(dataset)MergeTargets:
+  class: Concatenate
+  in: (dataset)KFold->targets
+  axis: 0
+(dataset)MergedMetrics:
+  class: ClassificationMetrics
+  predictions: (dataset)MergePredictions->out
+  targets: (dataset)MergeTargets->out
+  export: True

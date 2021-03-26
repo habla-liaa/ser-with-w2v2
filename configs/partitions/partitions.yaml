@@ -1,0 +1,23 @@
+include:
+  switch: !var (dataset)_partition
+  configs:
+  - name: random_split
+    config: random_split.yaml
+    dataset: (dataset)
+    in_task: (in_task)
+  - name: group_split
+    config: group_split.yaml
+    dataset: (dataset)
+    in_task: (in_task)
+  - name: leave_one_out
+    config: leave_one_out.yaml
+    dataset: (dataset)
+    in_task: (in_task)
+  - name: xval_predefined_folds_trainvaltest
+    config: predefined_folds_trainvaltest.yaml
+    dataset: (dataset)
+    in_task: (in_task)
+  - name: random_folds
+    config: random_folds.yaml
+    dataset: (dataset)
+    in_task: (in_task)

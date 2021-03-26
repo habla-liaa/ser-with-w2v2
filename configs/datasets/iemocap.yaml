@@ -68,7 +68,7 @@ Tasks:
         column: emotion
         include_values: !var IEMOCAP_emotions
       IEMOCAPOneHot:
-        class: OneHotEncode
+        class: LabelEncoder
         column: emotion
         new_column: classID
         in: IEMOCAPFilterEmotions->out

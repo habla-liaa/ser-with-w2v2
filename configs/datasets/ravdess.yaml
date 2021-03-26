@@ -49,7 +49,7 @@ Tasks:
         include_values: !var Ravdess_emotions
         cache: False
       RavdessOneHot:
-        class: OneHotEncode
+        class: LabelEncoder
         column: emotion
         new_column: classID
         in: RavdessFilterEmotions->out
