@@ -18,7 +18,7 @@ global:
   
   wav2vec2_summarization: sequence
   wav2vec2_embedding_layer: {} #This dict could have from and to keys. As default is 0 and len(activations), this will use all activations
-  wav2vec2_padding_axis: 0
+  sequence_padding_axis: 0
   normalization_axis: 0
 
   data_processing_config: ../batch/sequence_embedding.yaml
