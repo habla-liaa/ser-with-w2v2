@@ -10,7 +10,7 @@ global:
   IEMOCAP_model_max_seqlen: 400 #8 s
   IEMOCAP_partition: leave_one_out
 
-  dienen_config: !yaml experiments/configs/dienen/mean_mlp.yaml
+  dienen_config: !yaml configs/dienen/mean_mlp.yaml
   batch_x: [audio,mask]
   batch_y: targets
   batch_size: 32
