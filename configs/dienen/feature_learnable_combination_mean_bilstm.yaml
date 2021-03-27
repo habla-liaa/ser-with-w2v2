@@ -65,7 +65,7 @@ Model:
       bidirectional: !var lstm_bidirectional
       mask: signal_mask
   - GlobalAveragePooling1D:
-      input: hidden_layer
+      input: lstm_layer
       mask: signal_mask
   - Dense:
       #units: 3 #This is replaced in downstream_mods.yaml by each dataset
