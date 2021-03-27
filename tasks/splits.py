@@ -4,6 +4,7 @@ from pathlib import Path
 import tqdm
 import pandas as pd
 from sklearn.model_selection import GroupShuffleSplit
+import copy
 
 class GroupSplit(Task):
     def process(self):
