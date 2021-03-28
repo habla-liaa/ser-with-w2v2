@@ -9,6 +9,7 @@ defaults:
   mlp_hidden_activation: relu
   mlp_batchnorm: False
   batch_size: 64
+  dropout: 0.2
 
 gpu_config:
   device: !var gpu_id #Defaults to 0 (see models/dienen_classifier.yaml)
@@ -53,12 +54,14 @@ Model:
       activation: !var mlp_hidden_activation
       batch_norm: !var mlp_batchnorm
       name: hidden_layer_1
+      dropout: !var dropout
   - Conv1D:
       filters: !var mlp_hidden_units
       kernel_size: 1
       activation: !var mlp_hidden_activation
       batch_norm: !var mlp_batchnorm
       name: hidden_layer_2
+      dropout: !var dropout
   - GlobalAveragePooling1D:
       input: hidden_layer_2
       mask: signal_mask

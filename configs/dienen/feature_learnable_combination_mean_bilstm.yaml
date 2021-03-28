@@ -56,6 +56,7 @@ Model:
       kernel_size: 1
       activation: relu
       name: hidden_layer
+      dropout: !var dropout
   - LSTM:
       units: !var lstm_hidden_units
       activation: !var lstm_hidden_activation
@@ -64,6 +65,7 @@ Model:
       return_sequences: True
       bidirectional: !var lstm_bidirectional
       mask: signal_mask
+      dropout: !var dropout
   - GlobalAveragePooling1D:
       input: lstm_layer
       mask: signal_mask
