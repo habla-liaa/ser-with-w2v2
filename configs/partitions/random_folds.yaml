@@ -3,6 +3,7 @@
   in: (in_task)->out
   column: fold
   splits: !var n_folds
+  seed: !var seed
   export: True
 (dataset)LeaveOneOut:
   class: LeaveOneOut
@@ -14,7 +15,7 @@
   cache: False
   in:
     data: (dataset)Split->out
-    labels: (dataset)OneHot->labels
+    labels: (dataset)LabelEncode->labels
     dev_partitions: !map (dataset)LeaveOneOut->train
     test_partitions: !map (dataset)LeaveOneOut->test
     data_processor: (dataset)DataProcessor->out
