@@ -5,3 +5,5 @@ include:
     config: ravdess.yaml
   - name: iemocap
     config: iemocap.yaml
+  - name: iemocap_impro
+    config: iemocap_impro.yaml
