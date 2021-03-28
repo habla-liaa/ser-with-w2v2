@@ -77,7 +77,7 @@ Tasks:
         in_memory: True
       IEMOCAPFilterAgreement:
         class: Filter
-        in: IEMOCAPFilterEmotions->out
+        in: IEMOCAPFilterModality->out
         column: annotations_full_agreement
         include_values: !var IEMOCAP_full_agreement
         in_memory: True
@@ -85,7 +85,7 @@ Tasks:
         class: LabelEncoder
         column: emotion
         new_column: classID
-        in: IEMOCAPFilterEmotions->out
+        in: IEMOCAPFilterAgreement->out
         in_memory: True
       include:
       - config: ../features/features.yaml
