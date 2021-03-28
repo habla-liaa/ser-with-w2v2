@@ -82,6 +82,9 @@ class DienenModel(Task):
                     if last_epoch - best_epoch >= patience:
                         last_epoch = self.parameters['dienen_config/Model/Training/n_epochs']
                         weights_path = [epoch['weights_path'] for epoch in metadata if epoch['step'] == best_epoch][0]
+                        opt_weights_path = [epoch['opt_weights_path'] for epoch in metadata if epoch['step'] == best_epoch][0]
+                    else:
+                        weights_path = [epoch['weights_path'] for epoch in metadata if epoch['step'] == best_epoch][0]
                         opt_weights_path = [epoch['opt_weights_path'] for epoch in metadata if epoch['step'] == best_epoch][0]            
                 else:
                     weights_path = [epoch['weights_path'] for epoch in metadata if epoch['step'] == last_epoch][0]
