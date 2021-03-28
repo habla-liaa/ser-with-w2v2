@@ -42,12 +42,12 @@ seed_mod="global/seed=${SEED}"
 
 #---------------------------------------SOA Paper Setting---------------------------------------------
 #Ravdess
-errors=1
-while (($errors!=0)); do
-paiprun configs/main/w2v2-soapaper-config.yaml --output_path "s3://lpepino-datasets2/is2021_experiments/using_dropout/soapaper-ravdess/${SEED}" --mods "${seed_mod}&global/wav2vec2_embedding_layer=enc_and_transformer&global/normalize=global&global/dataset=ravdess"
-errors=$?; done
-#IEMOCAP
 #errors=1
 #while (($errors!=0)); do
-#paiprun configs/main/w2v2-soapaper-config.yaml --output_path "s3://lpepino-datasets2/is2021_experiments/using_dropout/soapaper-ravdess/${SEED}" --mods "${seed_mod}&global/wav2vec2_embedding_layer=enc_and_transformer&global/normalize=global&global/dataset=iemocap_impro"
+#paiprun configs/main/w2v2-soapaper-config.yaml --output_path "s3://lpepino-datasets2/is2021_experiments/using_dropout/soapaper-ravdess/${SEED}" --mods "${seed_mod}&global/wav2vec2_embedding_layer=enc_and_transformer&global/normalize=global&global/dataset=ravdess"
 #errors=$?; done
+#IEMOCAP
+errors=1
+while (($errors!=0)); do
+paiprun configs/main/w2v2-soapaper-config.yaml --output_path "s3://lpepino-datasets2/is2021_experiments/using_dropout/soapaper-iemocap/${SEED}" --mods "${seed_mod}&global/wav2vec2_embedding_layer=enc_and_transformer&global/normalize=global&global/dataset=iemocap_impro"
+errors=$?; done
