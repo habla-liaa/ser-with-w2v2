@@ -47,7 +47,10 @@ while (($errors!=0)); do
 paiprun configs/main/w2v2-exps.yaml --output_path "s3://lpepino-datasets2/is2021_experiments/using_dropout/w2v2PT-alllayers-lstm/${SEED}" --mods "${seed_mod}&global/wav2vec2_embedding_layer=enc_and_transformer&global/dienen_config=!yaml configs/dienen/feature_learnable_combination_mean_bilstm.yaml&global/batch_size=16"
 errors=$?; done
 #-SpeakerNorm
-#paiprun experiments/configs/main/w2v2-exps.yaml --output_path "s3://lpepino-datasets2/is2021_experiments/w2v2PT-alllayers-globalnorm/${SEED}" --mods $seeds_mod"global/wav2vec2_embedding_layer=enc_and_transformer&global/normalize=global"
+errors=1
+while (($errors!=0)); do
+paiprun configs/main/w2v2-exps.yaml --output_path "s3://lpepino-datasets2/is2021_experiments/using_dropout/w2v2PT-alllayers-globalnorm/${SEED}" --mods "${seed_mod}&global/wav2vec2_embedding_layer=enc_and_transformer&global/normalize=global"
+errors=$?; done
 #+eGeMAPS
 #paiprun experiments/configs/main/w2v2-os-exps.yaml --output_path "s3://lpepino-datasets2/is2021_experiments/w2v2PT-alllayers-egemaps/${SEED}" --mods $seeds_mod"global/wav2vec2_embedding_layer=enc_and_transformer&global/normalize=global"
 
