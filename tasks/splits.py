@@ -73,6 +73,9 @@ class RandomSplit(Task):
         stratified = self.parameters.get('stratified',None)
         if stratified is not None:
             stratified_classes = df[stratified].value_counts()
+	
+	if isinstance(splits,int):
+            splits = {'fold_{}'.format(i): 1.0/splits for i in range(splits)}
         
         for i, (s_name, s_prop) in enumerate(splits.items()):
             if i<len(splits)-1:
