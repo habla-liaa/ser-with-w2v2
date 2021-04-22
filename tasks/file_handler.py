@@ -3,7 +3,7 @@ import os
 import shutil
 from pathlib import Path
 import tqdm
-from swissknife.aws import download_s3, S3File
+from pyknife.aws import download_s3, S3File
 import tqdm
 import requests
 
@@ -68,7 +68,7 @@ class Downloader(Task):
 							download_file.write(chunk)
 					download_file.close()
 				elif download_metadata['SourcePath'].startswith('s3:/'):
-					from swissknife.aws import download_s3
+					from pyknife.aws import download_s3
 					bucket_name = download_metadata['SourcePath'].split('s3://')[-1].split('/')[0]
 					bucket_path = '/'.join(download_metadata['SourcePath'].split('s3://')[-1].split('/')[1:])
 					download_s3(bucket_name,bucket_path,str(destination_file))

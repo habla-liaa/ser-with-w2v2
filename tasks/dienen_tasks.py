@@ -16,7 +16,7 @@ import joblib
 
 from timeit import default_timer as timer
 
-from swissknife.aws import S3File
+from pyknife.aws import S3File
 from paips.utils import GenericFile
 
 from IPython import embed
