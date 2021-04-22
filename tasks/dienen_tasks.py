@@ -2,8 +2,6 @@ from paips.core import Task
 import tqdm
 import pandas as pd
 import numpy as np
-from deytah.batch_generator import BatchGenerator
-from deytah.core import DataProcessor
 
 from dienen import Model
 from kahnfigh import Config
@@ -147,8 +145,8 @@ class DienenPredict(Task):
         deytah_keys = self.parameters.get('deytah_keys',None)
         activations = self.parameters.get('activations','output')
 
-        if deytah_process is not None:
-            deytah_process = DataProcessor(deytah_process)
+        #if deytah_process is not None:
+        #    deytah_process = DataProcessor(deytah_process)
         group_predictions = self.parameters.get('group_predictions_by',None)
         return_as_metadata = self.parameters.get('return_as_metadata',False)
         batch_as_time = self.parameters.get('batch_as_axis',None)
