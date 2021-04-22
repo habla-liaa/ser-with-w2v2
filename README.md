@@ -2,3 +2,11 @@
 
 Work in progress. All the configuration files and code to replicate the experiments are available, however some of the libraries that are used are still in process of being released.
 
+Requirements:
+
+Install sox in your system
+```
+sudo apt-get install sox
+```
+We recommend running these scripts using a virtual environment like Anaconda, which should have Tensorflow and PyTorch installed.
+
