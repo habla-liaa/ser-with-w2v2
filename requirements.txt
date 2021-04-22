@@ -3,3 +3,4 @@ paips==0.0.4
 pymediainfo
 opensmile==2.0.0
 seaborn
+git+https://github.com/mrpep/fairseq.git@master
