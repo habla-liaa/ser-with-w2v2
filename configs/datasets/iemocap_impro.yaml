@@ -42,18 +42,18 @@ Tasks:
     in:
       wandb: !var wandb_run
     Tasks:
-      IEMOCAPDownloader:
-        class: Downloader
-        in_memory: True
-        downloads:
-        - SourcePath: s3://lpepino-datasets2/datasets/iemocap-wav.zip
-          DestinationPath: ~/Datasets/iemocap-wav.zip
-          Extract: True
-        - SourcePath: s3://lpepino-datasets2/datasets/iemocap_partitions
-          DestinationPath: ~/Datasets/IEMOCAP/partitions
+      #IEMOCAPDownloader:
+      #  class: Downloader
+      #  in_memory: True
+      #  downloads:
+      #  - SourcePath: s3://lpepino-datasets2/datasets/iemocap-wav.zip
+      #    DestinationPath: ~/Datasets/iemocap-wav.zip
+      #    Extract: True
+      #  - SourcePath: s3://lpepino-datasets2/datasets/iemocap_partitions
+      #    DestinationPath: ~/Datasets/IEMOCAP/partitions
       IEMOCAPReader:
         class: IEMOCAPReader
-        run_after: IEMOCAPDownloader->out
+        #run_after: IEMOCAPDownloader->out
         dataset_path: ~/Datasets/IEMOCAP
       IEMOCAPRelabelExcitement:
         class: Relabel

@@ -21,16 +21,16 @@ Tasks:
     in:
       wandb: !var wandb_run
     Tasks:
-      RavdessDownloader:
-        class: Downloader
-        in_memory: True
-        downloads:
-        - SourcePath: s3://lpepino-datasets2/datasets/ravdess.zip
-          DestinationPath: ~/Datasets/RAVDESS/ravdess.zip
-          Extract: True
+      #RavdessDownloader:
+      #  class: Downloader
+      #  in_memory: True
+      #  downloads:
+      #  - SourcePath: s3://lpepino-datasets2/datasets/ravdess.zip
+      #    DestinationPath: ~/Datasets/RAVDESS/ravdess.zip
+      #    Extract: True
       RavdessReader:
         class: AudioDatasetFromDirectory
-        run_after: RavdessDownloader->out
+      #  run_after: RavdessDownloader->out
         dataset_path: ~/Datasets/RAVDESS
         filename_re: (?P<modality>\d*)-(?P<vocal_channel>\d*)-(?P<emotion>\d*)-(?P<emotional_intensity>\d*)-(?P<statement>\d*)-(?P<repetition>\d*)-(?P<actor>\d*).wav
       RavdessRelabelCalm:
