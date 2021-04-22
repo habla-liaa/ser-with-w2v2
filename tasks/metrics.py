@@ -2,7 +2,7 @@ from paips.core import Task
 import tqdm
 import pandas as pd
 import numpy as np
-from deytah.batch_generator import BatchGenerator
+
 from dienen import Model
 from kahnfigh import Config
 import os

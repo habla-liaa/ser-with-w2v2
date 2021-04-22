@@ -73,9 +73,9 @@ class RandomSplit(Task):
         stratified = self.parameters.get('stratified',None)
         if stratified is not None:
             stratified_classes = df[stratified].value_counts()
-	
-	if isinstance(splits,int):
-            splits = {'fold_{}'.format(i): 1.0/splits for i in range(splits)}
+    
+        if isinstance(splits,int):
+                splits = {'fold_{}'.format(i): 1.0/splits for i in range(splits)}
         
         for i, (s_name, s_prop) in enumerate(splits.items()):
             if i<len(splits)-1:
@@ -98,106 +98,106 @@ class RandomSplit(Task):
         return df_original
 
 class Split(Task):
-	def process(self):
-		data = self.parameters['in']
-		seed = self.parameters.get('seed',1234)
-		#Partitions are already provided in a column:
-		split_col = self.parameters.get('split_col',None)
-		if split_col:
-			partition_names = data[split_col].unique()
-			partition_names.sort()
-			group_outputs = self.parameters.get('group_outputs',None)
-			if group_outputs:
-				output_groups = []
-				self.output_names = []
-				for group_name, group_items in group_outputs.items():
-					output_group_i = data[data[split_col].isin(group_items)]
-					output_groups.append(output_group_i)
-					self.output_names.append(group_name)
-				return tuple(output_groups)
-			else:
-				self.output_names = partition_names
-				return tuple([data[data[split_col] == part_name] for part_name in partition_names])
-		
-		ratios = self.parameters.get('ratios',None)
+    def process(self):
+        data = self.parameters['in']
+        seed = self.parameters.get('seed',1234)
+        #Partitions are already provided in a column:
+        split_col = self.parameters.get('split_col',None)
+        if split_col:
+            partition_names = data[split_col].unique()
+            partition_names.sort()
+            group_outputs = self.parameters.get('group_outputs',None)
+            if group_outputs:
+                output_groups = []
+                self.output_names = []
+                for group_name, group_items in group_outputs.items():
+                    output_group_i = data[data[split_col].isin(group_items)]
+                    output_groups.append(output_group_i)
+                    self.output_names.append(group_name)
+                return tuple(output_groups)
+            else:
+                self.output_names = partition_names
+                return tuple([data[data[split_col] == part_name] for part_name in partition_names])
+        
+        ratios = self.parameters.get('ratios',None)
 
-		if ratios:
-			stratified = self.parameters.get('stratified',None)
-			
-			out = []
-			self.output_names = []
+        if ratios:
+            stratified = self.parameters.get('stratified',None)
+            
+            out = []
+            self.output_names = []
 
-			if stratified is not None:
-				stratified_classes = data[stratified].value_counts()
+            if stratified is not None:
+                stratified_classes = data[stratified].value_counts()
 
-			data_len = len(data)
+            data_len = len(data)
 
-			for i, (k, v) in enumerate(ratios.items()):
-				if i<len(ratios)-1:
-					if stratified is not None:
-						out_i = []
-						for strata_name,strata_n in stratified_classes.items():
-							strata_data = data.loc[data[stratified]==strata_name]
-							out_i.append(strata_data.sample(int(v*strata_n),random_state=seed))
-						try:
-							out_i = pd.concat(out_i)
-						except:
-							from IPython import embed
-							embed()
-					else:
-						n = int(v*data_len)
-						out_i = data.sample(n=n, random_state=seed)
-					sampled_idxs = out_i.index
-					out.append(out_i)
-					data = data.loc[~data.index.isin(sampled_idxs)]
-				else:
-					out.append(data)
-				self.output_names.append(k)
-			
-			if stratified:
-				for data_i,part_name in zip(out,self.output_names):
-					print(part_name)
-					print('------------------------------------------\n')
-					print(data[stratified].value_counts(normalize=True))
-					print(len(data_i))
-					print('')
+            for i, (k, v) in enumerate(ratios.items()):
+                if i<len(ratios)-1:
+                    if stratified is not None:
+                        out_i = []
+                        for strata_name,strata_n in stratified_classes.items():
+                            strata_data = data.loc[data[stratified]==strata_name]
+                            out_i.append(strata_data.sample(int(v*strata_n),random_state=seed))
+                        try:
+                            out_i = pd.concat(out_i)
+                        except:
+                            from IPython import embed
+                            embed()
+                    else:
+                        n = int(v*data_len)
+                        out_i = data.sample(n=n, random_state=seed)
+                    sampled_idxs = out_i.index
+                    out.append(out_i)
+                    data = data.loc[~data.index.isin(sampled_idxs)]
+                else:
+                    out.append(data)
+                self.output_names.append(k)
+            
+            if stratified:
+                for data_i,part_name in zip(out,self.output_names):
+                    print(part_name)
+                    print('------------------------------------------\n')
+                    print(data[stratified].value_counts(normalize=True))
+                    print(len(data_i))
+                    print('')
 
-			return tuple(out)
+            return tuple(out)
 
-		#Make partitions using groups from a column (ie speakers) as samples (REVISAR)
-		group = self.parameters.get('group',None)
-		seed = self.parameters.get('seed',1234)
-		if group:
-			test_size = self.parameters.get('test_size',0.2)
-			train_size = self.parameters.get('train_size',None)
-			gss = GroupShuffleSplit(n_splits=1,test_size=test_size,train_size=train_size,random_state=seed)
-			split_idxs = list(gss.split(data.values,groups=data[group].values))
-			self.output_names = ['train','test']
-			return (data.iloc[split_idxs[0][0]],data.iloc[split_idxs[0][1]])
+        #Make partitions using groups from a column (ie speakers) as samples (REVISAR)
+        group = self.parameters.get('group',None)
+        seed = self.parameters.get('seed',1234)
+        if group:
+            test_size = self.parameters.get('test_size',0.2)
+            train_size = self.parameters.get('train_size',None)
+            gss = GroupShuffleSplit(n_splits=1,test_size=test_size,train_size=train_size,random_state=seed)
+            split_idxs = list(gss.split(data.values,groups=data[group].values))
+            self.output_names = ['train','test']
+            return (data.iloc[split_idxs[0][0]],data.iloc[split_idxs[0][1]])
 
-		lists = self.parameters.get('lists',None)
-		list_field = self.parameters.get('list_item_column',None)
-		if lists is not None:
-			outs = []
-			output_names = []
-			for k,v in lists.items():
-				output_names.append(k)
-				with open(str(Path(v).expanduser()),'r') as f:
-					list_items = f.read().splitlines()
-				if not list_field == 'use_index':
-					index_name = data.index.name
-					data.reset_index(inplace=True)
-					data = data.set_index(list_field)
+        lists = self.parameters.get('lists',None)
+        list_field = self.parameters.get('list_item_column',None)
+        if lists is not None:
+            outs = []
+            output_names = []
+            for k,v in lists.items():
+                output_names.append(k)
+                with open(str(Path(v).expanduser()),'r') as f:
+                    list_items = f.read().splitlines()
+                if not list_field == 'use_index':
+                    index_name = data.index.name
+                    data.reset_index(inplace=True)
+                    data = data.set_index(list_field)
 
-				list_items = [x for x in list_items if x in data.index]
+                list_items = [x for x in list_items if x in data.index]
 
-				df_i = data.loc[list_items]
+                df_i = data.loc[list_items]
 
-				if not list_field == 'use_index':
-					df_i = df_i.set_index(index_name)
+                if not list_field == 'use_index':
+                    df_i = df_i.set_index(index_name)
 
-				outs.append(df_i)
+                outs.append(df_i)
 
-			self.output_names = output_names
-			
-			return tuple(outs)
+            self.output_names = output_names
+            
+            return tuple(outs)

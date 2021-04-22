@@ -1,7 +1,8 @@
 modules:
 - tasks
 global:
-  cache_path: s3://lpepino-datasets2/is2021_experiments/cache
+  #cache_path: s3://lpepino-datasets2/is2021_experiments/cache
+  cache_path: cache
   dataset: [ravdess, iemocap]
   features: opensmile
   model: dienen_classifier
