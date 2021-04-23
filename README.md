@@ -14,7 +14,7 @@ Install sox in your system
 sudo apt-get install sox
 ```
 
-Datasets should be placed at ~/Datasets with a structure like this:
+[RAVDESS](https://zenodo.org/record/1188976#.YILiD3VKiV4) and [IEMOCAP](https://sail.usc.edu/iemocap/) datasets need to be downloaded and placed at ~/Datasets with a folder structure like this:
 ```
 ├── IEMOCAP
 │   ├── Documentation
