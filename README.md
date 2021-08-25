@@ -12,6 +12,7 @@ pip install -r requirements.txt
 Install sox in your system
 ```
 sudo apt-get install sox
+sudo apt-get install libmediainfo-dev
 ```
 
 [RAVDESS](https://zenodo.org/record/1188976#.YILiD3VKiV4) and [IEMOCAP](https://sail.usc.edu/iemocap/) datasets need to be downloaded and placed at ~/Datasets with a folder structure like this:
