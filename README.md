@@ -9,7 +9,7 @@ Install required python packages:
 pip install -r requirements.txt
 ```
 
-Install sox in your system
+Install sox and libmediainfo in your system
 ```
 sudo apt-get install sox
 sudo apt-get install libmediainfo-dev
