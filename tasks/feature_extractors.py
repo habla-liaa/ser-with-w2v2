@@ -41,10 +41,7 @@ class OpensmileExtractor(Task):
                 else:
                     return output_feature_filename.load()
             else:
-                try:
-                    y = smile.process_file(x,channel=0)
-                except:
-                    embed()
+                y = smile.process_file(x,channel=0)
                 if max_size:
                     y = y[:max_size]
                 if save_feature_files:

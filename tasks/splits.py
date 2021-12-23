@@ -139,11 +139,9 @@ class Split(Task):
                         for strata_name,strata_n in stratified_classes.items():
                             strata_data = data.loc[data[stratified]==strata_name]
                             out_i.append(strata_data.sample(int(v*strata_n),random_state=seed))
-                        try:
-                            out_i = pd.concat(out_i)
-                        except:
-                            from IPython import embed
-                            embed()
+
+                        out_i = pd.concat(out_i)
+
                     else:
                         n = int(v*data_len)
                         out_i = data.sample(n=n, random_state=seed)

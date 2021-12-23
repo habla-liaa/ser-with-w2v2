@@ -17,8 +17,6 @@ from timeit import default_timer as timer
 from pyknife.aws import S3File
 from paips.utils import GenericFile
 
-from IPython import embed
-
 class DienenModel(Task):
     def process(self):
         if self.parameters.get('bukh_experiment',None):

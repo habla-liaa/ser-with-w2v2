@@ -7,8 +7,6 @@ from pyknife.aws import download_s3, S3File
 import tqdm
 import requests
 
-from IPython import embed
-
 class CopyFiles(Task):
 	#Can copy from S3 but not viceversa
 	def process(self):

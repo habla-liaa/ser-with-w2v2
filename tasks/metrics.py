@@ -19,8 +19,6 @@ import seaborn as sns
 import wandb
 import matplotlib.pyplot as plt
 
-from IPython import embed
-
 class ClassificationMetrics(Task):
     def process(self):
         metrics = ['accuracy_score','balanced_accuracy_score','f1_score','precision_score','recall_score']
