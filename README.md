@@ -1,6 +1,6 @@
-### Repository for the paper 'Emotion Recognition from Speech Using Wav2vec 2.0 Embeddings' by Leonardo Pepino, Pablo Riera and Luciana Ferrer
+## Repository for the paper 'Emotion Recognition from Speech Using Wav2vec 2.0 Embeddings' by Leonardo Pepino, Pablo Riera and Luciana Ferrer
 
-##### Requirements:
+### Requirements:
 
 We recommend running these scripts using a virtual environment like Anaconda, which should have Tensorflow 2.4.1 and PyTorch 1.7.1 installed.
 
@@ -31,7 +31,7 @@ sudo apt-get install libmediainfo-dev
         └── speech
 ```
 
-##### Replicating our experiments
+### Replicating our experiments
 
 In our paper we run many different experiments using 5 seeds for each one. If you want to replicate that procedure,
 run in a terminal:
@@ -60,7 +60,7 @@ The experiments outputs will be saved at <output_path>. A cache folder will be g
 Take into account that run_seeds.sh executes many experiments (all the presented in the paper), and repeats it 5 times (using different seeds for the random number generators), so it is expected that the process
 takes a very long time and drive space. We ran the experiments using multiple AWS P3.2x large instances, which have a Tesla V100 GPU.
 
-##### Analyzing the outputs
+### Analyzing the outputs
 
 The outputs saved at <output_path> can be examined from Python using joblib. For example, running:
 
@@ -74,5 +74,15 @@ will load the resulting metrics in the 'metrics' variable.
 In this [notebook](notebooks/results.ipynb), more examples of how the generated outputs can be analysed are given.
 Moreover, we provide the results from all our experiments in the experiments folder and the results.ipynb notebook will generate the tables of our paper.
 
-### Using pretrained models
+### 🔥🔥🔥 Using pretrained models 🔥🔥🔥
+⚠️**WARNING: The models we trained, as most speech emotion recognition models, are very unlikely to generalize to datasets other than the used for training, which are recorded in clean conditions and with actors**⚠️
 
+| Model  | Dataset | Links
+| ------------------------ | ------- | -------- | 
+|      w2v2PT-fusion       | IEMOCAP | Folds: [1](experiments/w2v2PT-fusion/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/0/IEMOCAPModel) [2](experiments/w2v2PT-fusion/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/1/IEMOCAPModel) [3](experiments/w2v2PT-fusion/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/2/IEMOCAPModel) [4](experiments/w2v2PT-fusion/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/3/IEMOCAPModel) [5](experiments/w2v2PT-fusion/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/4/IEMOCAPModel) |
+|      w2v2PT-fusion       | RAVDESS | [Model](experiments/w2v2PT-fusion/3456/MainTask/DownstreamRavdess/RavdessModel) |
+| w2v2PT-alllayers-global  | IEMOCAP | Folds: [1](experiments/w2v2PT-alllayers-global/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/0/IEMOCAPModel) [2](experiments/w2v2PT-alllayers-global/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/1/IEMOCAPModel) [3](experiments/w2v2PT-alllayers-global/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/2/IEMOCAPModel) [4](experiments/w2v2PT-alllayers-global/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/3/IEMOCAPModel) [5](experiments/w2v2PT-alllayers-global/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/4/IEMOCAPModel) |
+| w2v2PT-alllayers-global  | RAVDESS | [Model](experiments/w2v2PT-alllayers-global/4567/MainTask/DownstreamRavdess/RavdessModel) |
+|     w2v2PT-alllayers     | IEMOCAP | Folds: [1](experiments/w2v2PT-alllayers/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/0/IEMOCAPModel) [2](experiments/w2v2PT-alllayers/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/1/IEMOCAPModel) [3](experiments/w2v2PT-alllayers/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/2/IEMOCAPModel) [4](experiments/w2v2PT-alllayers/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/3/IEMOCAPModel) [5](experiments/w2v2PT-alllayers/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/4/IEMOCAPModel) |
+|     w2v2PT-alllayers     | RAVDESS | [Model](experiments/w2v2PT-alllayers/2345/MainTask/DownstreamRavdess/RavdessModel) |
+|  Issa et al. eval setup  | RAVDESS | [1](experiments/issa-setup-ravdess/1234/MainTask/DownstreamRavdess/RavdessKFold/0/RavdessModel) [2](experiments/issa-setup-ravdess/1234/MainTask/DownstreamRavdess/RavdessKFold/1/RavdessModel) [3](experiments/issa-setup-ravdess/1234/MainTask/DownstreamRavdess/RavdessKFold/2/RavdessModel) [4](experiments/issa-setup-ravdess/1234/MainTask/DownstreamRavdess/RavdessKFold/3/RavdessModel) [5](experiments/issa-setup-ravdess/1234/MainTask/DownstreamRavdess/RavdessKFold/4/RavdessModel) |
