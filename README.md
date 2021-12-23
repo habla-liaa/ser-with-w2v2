@@ -1,4 +1,4 @@
-## Repository for the paper 'Emotion Recognition from Speech Using Wav2vec 2.0 Embeddings' by Leonardo Pepino, Pablo Riera and Luciana Ferrer
+### Official implementation of ['Emotion Recognition from Speech Using Wav2vec 2.0 Embeddings'](https://www.isca-speech.org/archive/interspeech_2021/pepino21_interspeech.html)
 
 ### Requirements:
 
@@ -85,4 +85,17 @@ Moreover, we provide the results from all our experiments in the experiments fol
 | w2v2PT-alllayers-global  | RAVDESS | [Model](experiments/w2v2PT-alllayers-global/4567/MainTask/DownstreamRavdess/RavdessModel) |
 |     w2v2PT-alllayers     | IEMOCAP | Folds: [1](experiments/w2v2PT-alllayers/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/0/IEMOCAPModel) [2](experiments/w2v2PT-alllayers/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/1/IEMOCAPModel) [3](experiments/w2v2PT-alllayers/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/2/IEMOCAPModel) [4](experiments/w2v2PT-alllayers/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/3/IEMOCAPModel) [5](experiments/w2v2PT-alllayers/4567/MainTask/DownstreamIEMOCAP/IEMOCAPKFold/4/IEMOCAPModel) |
 |     w2v2PT-alllayers     | RAVDESS | [Model](experiments/w2v2PT-alllayers/2345/MainTask/DownstreamRavdess/RavdessModel) |
-|  Issa et al. eval setup  | RAVDESS | [1](experiments/issa-setup-ravdess/1234/MainTask/DownstreamRavdess/RavdessKFold/0/RavdessModel) [2](experiments/issa-setup-ravdess/1234/MainTask/DownstreamRavdess/RavdessKFold/1/RavdessModel) [3](experiments/issa-setup-ravdess/1234/MainTask/DownstreamRavdess/RavdessKFold/2/RavdessModel) [4](experiments/issa-setup-ravdess/1234/MainTask/DownstreamRavdess/RavdessKFold/3/RavdessModel) [5](experiments/issa-setup-ravdess/1234/MainTask/DownstreamRavdess/RavdessKFold/4/RavdessModel) |
+|  Issa et al. eval setup  | RAVDESS | Folds: [1](experiments/issa-setup-ravdess/1234/MainTask/DownstreamRavdess/RavdessKFold/0/RavdessModel) [2](experiments/issa-setup-ravdess/1234/MainTask/DownstreamRavdess/RavdessKFold/1/RavdessModel) [3](experiments/issa-setup-ravdess/1234/MainTask/DownstreamRavdess/RavdessKFold/2/RavdessModel) [4](experiments/issa-setup-ravdess/1234/MainTask/DownstreamRavdess/RavdessKFold/3/RavdessModel) [5](experiments/issa-setup-ravdess/1234/MainTask/DownstreamRavdess/RavdessKFold/4/RavdessModel) |
+
+Cite as: Pepino, L., Riera, P., Ferrer, L. (2021) Emotion Recognition from Speech Using wav2vec 2.0 Embeddings. Proc. Interspeech 2021, 3400-3404, doi: 10.21437/Interspeech.2021-703
+
+```
+@inproceedings{pepino21_interspeech,
+  author={Leonardo Pepino and Pablo Riera and Luciana Ferrer},
+  title={{Emotion Recognition from Speech Using wav2vec 2.0 Embeddings}},
+  year=2021,
+  booktitle={Proc. Interspeech 2021},
+  pages={3400--3404},
+  doi={10.21437/Interspeech.2021-703}
+}
+```
