@@ -2,7 +2,7 @@
 
 ### Requirements:
 
-We recommend running these scripts using a virtual environment like Anaconda, which should have Tensorflow 2.4.1 and PyTorch 1.7.1 installed.
+We recommend running these scripts using a virtual environment like Anaconda with Python 3.8, which should have Tensorflow 2.4.1 and PyTorch 1.7.1 installed.
 
 Install required python packages:
 ```
