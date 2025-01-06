@@ -20,7 +20,7 @@ class PadDP(Task):
             mask = np.zeros([max_length,])
             slc = [slice(None)] * len(x.shape)
             slc[axis] = slice(0, min(x.shape[axis],max_length))
-            out[slc] = x[slc]
+            out[slc[0]] = x[slc[0]]
             mask[:x.shape[axis]] = 1
             return out, mask
 
@@ -97,6 +97,7 @@ class DownsampleDP(Task):
         mode = self.parameters.get('mode','mean')
 
         data = self.parameters['in']
+        
 
         def fn(x):
             target_axis_dim = x.shape[axis] + factor-(x.shape[axis]%factor)
@@ -108,7 +109,7 @@ class DownsampleDP(Task):
 
             slc = [slice(None)] * len(target_shape)
             slc[axis] = slice(0, x.shape[axis])
-            y[slc] = x
+            y[slc[0]] = x
             y = np.swapaxes(y,axis,-1)
             reshape_shape = list(y.shape)
             reshape_shape[-1] = reshape_shape[-1]//factor

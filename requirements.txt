@@ -4,3 +4,14 @@ pymediainfo
 opensmile==2.0.0
 seaborn
 git+https://github.com/mrpep/fairseq.git@master
+torch==2.1.2+cu121
+torchaudio==2.1.2
+torchvision==0.16.2+cu121
+tensorflow==2.4.1
+tensorflow-addons==0.12.1
+ruamel.yaml==0.17.2
+ruamel.yaml.clib==0.2.8
+librosa==0.10.2.post1
+numba==0.56.4
+hydra-core==1.0.7
+omegaconf==2.0.6
